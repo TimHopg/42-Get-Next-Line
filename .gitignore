@@ -1,0 +1,6 @@
+*.out
+*.txt
+*.gch
+.vscode
+*.dSYM
+/bonus
