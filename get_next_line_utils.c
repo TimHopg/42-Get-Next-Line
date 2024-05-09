@@ -1,59 +1,65 @@
 #include "get_next_line.h"
 
-char	*ft_strchr(char *s, int c)
+void	ft_deallocate(void **ptr)
 {
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i] != (char)c && s[i] != '\0')
-		i++;
-	if (s[i] == (char)c)
-		return (&s[i]);
-	return (0);
+	if (ptr == NULL || *ptr == NULL)
+		return ;
+	free(*ptr);
+	*ptr = NULL;
 }
 
-size_t	ft_strlen(char *str)
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (*s++)
+		len++;
+	return (len);
+}
+
+/*
+ * Returns a pointer to the first occurrence of c in string s incl. '\0'.
+ * Returns NULL if c is not found.
+ * *l = also returns null if !s
+ */
+
+char	*ft_strchr_l(const char *s, int c)
 {
 	size_t	i;
+	size_t	str_len;
 
-	if (str == NULL)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*ft_strdup(char *src)
-{
-	char	*new_str;
-
-	new_str = (char *)malloc((ft_strlen(src) + 1) * sizeof(char));
-	if (new_str == NULL)
-	{
+	if (!s)
 		return (NULL);
-	}
-	ft_strcpy(new_str, src);
-	return (new_str);
+	i = -1;
+	str_len = ft_strlen(s);
+	while (++i < str_len + 1)
+		if (s[i] == (char)c)
+			return ((char *)&s[i]);
+	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+/*
+ * String duplication. Allocates memory using malloc for new string and copies
+	contents of original string incl. null termination.
+*/
+
+char	*ft_strdup(const char *s)
+{
+	char	*dup_s;
+	size_t	i;
+
+	dup_s = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (dup_s == NULL)
+		return (NULL);
+	i = -1;
+	while (s[++i])
+		dup_s[i] = s[i];
+	dup_s[i] = '\0';
+	return (dup_s);
+}
+
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -67,7 +73,10 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s2));
 	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!str)
+	{
+		// ft_deallocate((void *)&s1);
 		return (NULL);
+	}
 	while (s1[i])
 	{
 		str[i] = s1[i];
@@ -76,6 +85,38 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		str[i++] = s2[j++];
 	str[i] = '\0';
-	free(s1);
 	return (str);
+}
+
+/*
+ * Allocates with malloc and returns new string, s1 + s2.
+ * Returns ptr to new string or NULL if fails.
+ * *** if !s1, returns dup of s2
+ */
+
+char	*ft_strjoin_l(char const *s1, char const *s2)
+{
+	char	*res;
+	int		i;
+	int		j;
+
+	if (s2 == NULL)
+		return (NULL);
+	if (s1 == NULL)
+	{
+		// ft_deallocate((void *)&s1);
+		return (ft_strdup(s2));
+	}
+	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (res == NULL)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
+		res[i] = s1[i];
+	j = 0;
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	ft_deallocate((void *)&s1);
+	return (res);
 }

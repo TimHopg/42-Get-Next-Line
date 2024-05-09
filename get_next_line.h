@@ -18,10 +18,12 @@
 #  define MAX_FD 1024
 # endif
 
-size_t	ft_strlen(char *str);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strchr(char *s, int c);
 char	*get_next_line(int fd);
-char	*ft_strdup(char *src);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin_l(char const *s1, char const *s2);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr_l(const char *s, int c);
+char	*ft_strdup(const char *s);
+void	ft_deallocate(void **ptr);
 
 #endif
