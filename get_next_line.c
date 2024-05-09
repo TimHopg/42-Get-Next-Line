@@ -8,91 +8,67 @@ void	ft_deallocate(void **ptr)
 	*ptr = NULL;
 }
 
-char	*ft_read_line(int fd, char *buffer)
+char	*ft_read_line(int fd, char *buffer, int *err_code)
 {
-	char	*tmp;
+	char	*temp_buf;
 	int		bytes_read;
 
 	bytes_read = 1;
-	tmp = malloc(BUFFER_SIZE + 1);
-	if (!tmp)
-		return (NULL);
-	while (bytes_read != 0 && !ft_strchr(buffer, '\n'))
+	temp_buf = malloc(BUFFER_SIZE + 1);
+	if (!temp_buf)
 	{
-		bytes_read = read(fd, tmp, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(tmp);
-			free(buffer);
-			return (NULL);
-		}
-		tmp[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, tmp);
-		if (!buffer)
-			return (NULL);
+		*err_code = 1;
+		return (NULL);
 	}
-	free(tmp);
-	return (buffer);
+	while (bytes_read && !ft_strchr(buffer, '\n'))
+	{
+		bytes_read = read(fd, temp_buf, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			*err_code = 1;
+			ft_deallocate((void *)&temp_buf);
+			return (ft_deallocate((void *)&buffer), NULL);
+		}
+		temp_buf[bytes_read] = '\0';
+		buffer = ft_strjoin(buffer, temp_buf);
+		if (buffer == NULL)
+		{
+			*err_code = 1;
+			return (ft_deallocate((void *)&temp_buf), NULL);
+		}
+		// ft_deallocate((void *)&temp_buf);
+	}
+	return (ft_deallocate((void *)&temp_buf), buffer);
 }
 
 char	*ft_build_line(char *buffer)
 {
 	char	*line;
-	int		i;
-	// int		j;
+	size_t	count;
 	size_t	split_index;
 	char	*nl_ptr;
 
-	i = 0;
-	// j = 0;
 	if (buffer[0] == '\0')
 		return (NULL);
-
-
-
 	nl_ptr = ft_strchr(buffer, '\n');
 	if (nl_ptr)
 		split_index = (nl_ptr - buffer + 1);
 	else
 		split_index = ft_strlen(buffer);
-	
-	
-
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (buffer[i])
-		i++;
-	
-
-
 	line = malloc(split_index + 1);
 	if (!line)
-		return (NULL);
-	
-	
-	i = 0;
-	while (split_index-- >= 0)
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-
-	
-	// while (buffer[i] && buffer[i] != '\n')
-	// 	line[j++] = buffer[i++];
-	// if (buffer[i] == '\n')
-	// {
-	// 	line[j] = '\n';
-	// 	j++;
-	// }
-	// line[j] = '\0';
+		return (NULL); // !
+	count = -1;
+	while (++count < split_index)
+		line[count] = buffer[count];
+	line[count] = '\0';
 	return (line);
 }
 
 char	*ft_split_remainder(char *buffer)
 {
 	char	*remainder;
-	char 	*nl_pos;
+	char	*nl_pos;
 
 	if (buffer == NULL)
 		return (NULL);
@@ -109,12 +85,20 @@ char	*get_next_line(int fd)
 {
 	static char	*buffer[MAX_FD];
 	char		*line;
+	int			err_code;
 
+	err_code = 0;
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	buffer[fd] = ft_read_line(fd, buffer[fd]);
+	buffer[fd] = ft_read_line(fd, buffer[fd], &err_code);
 	if (buffer[fd] == NULL)
 		return (NULL);
+	if (err_code == 1)
+	{
+		// printf("%d err_code\n", err_code);
+		ft_deallocate((void *)&buffer);
+		return (NULL);
+	}
 	line = ft_build_line(buffer[fd]);
 	buffer[fd] = ft_split_remainder(buffer[fd]);
 	return (line);
