@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:07 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 21:32:51 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:55:43 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,3 +126,159 @@ char	*get_next_line(int fd)
 		return (ft_dealloc(&line));
 	return (line);
 }
+
+// int	main(void)
+// {
+// 	int fd1;
+// 	int fd2;
+// 	int fd3;
+// 	char	*line;
+
+// 	fd1 = open("bonus1.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+// 	write(fd1, "AAAAAAAAAA\n", 11);
+// 	write(fd1, "BBBBBBBBBB\n", 11);
+// 	write(fd1, "CCCCCCCCCC\n", 11);
+// 	write(fd1, "DDDDDDDDDD", 10);
+// 	close(fd1);
+
+// 	fd2 = open("bonus2.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+// 	write(fd2, "EEEEEEEEEE\n", 11);
+// 	write(fd2, "FFFFFFFFFF\n", 11);
+// 	write(fd2, "GGGGGGGGGG\n", 11);
+// 	write(fd2, "HHHHHHHHHH", 10);
+// 	close(fd2);
+
+// 	fd3 = open("bonus3.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+// 	write(fd3, "IIIIIIIIII\n", 11);
+// 	write(fd3, "JJJJJJJJJJ\n", 11);
+// 	write(fd3, "KKKKKKKKKK\n", 11);
+// 	write(fd3, "LLLLLLLLLL", 10);
+// 	close(fd3);
+
+// 	int fd1_lines = 1;
+// 	int fd2_lines = 1;
+// 	int fd3_lines = 1;
+
+// 	printf("MULTIPLE FD TESTS\n");
+
+// 	fd1 = open("bonus1.txt", O_RDONLY);
+// 	fd2 = open("bonus2.txt", O_RDONLY);
+// 	fd3 = open("bonus3.txt", O_RDONLY);
+
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+// 	printf("\n");
+
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+// 	printf("\n");
+
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+// 	printf("\n\n");
+
+// 	close(fd1);
+// 	close(fd2);
+// 	close(fd3);
+
+// 	fd1_lines = 1;
+// 	fd2_lines = 1;
+// 	fd3_lines = 1;
+
+// 	printf("MULTIPLE FD WITH ERROR\n");
+
+// 	fd1 = open("bonus1.txt", O_RDONLY);
+// 	fd2 = open("bonus2.txt", O_RDONLY);
+// 	fd3 = open("bonus3.txt", O_RDONLY);
+
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+// 	line = get_next_line(-1);
+// 	printf("NON-EXISTING FD\n");
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	printf("\n");
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd1);
+// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// 	free(line);
+// 	printf("\n");
+// 	line = get_next_line(fd2);
+// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// 	free(line);
+// 	line = get_next_line(fd3);
+// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// 	free(line);
+// 	printf("\n");
+
+// 	close(fd1);
+// 	close(fd2);
+// 	close(fd3);
+// }
+
+// /*
+//  * ulimit -a -H: hard limits of system processes
+//  * FOPEN_MAX a macro of maximum number of files (not relevant)
+//  * sysconf(_SC_OPEN_MAX) in stdio.h system wide max fd
+//  * getrlimit/setrlimit process specific limits
+//  * #include <sys/stat.h> // USR permissions
+// */

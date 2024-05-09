@@ -1,6 +1,6 @@
 *.out
 *.txt
 *.gch
-.vscode
+/.vscode
 *.dSYM
 /bonus
