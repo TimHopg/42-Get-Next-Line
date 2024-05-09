@@ -1,13 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/09 19:39:18 by thopgood          #+#    #+#             */
+/*   Updated: 2024/05/09 19:48:28 by thopgood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <ctype.h>
 # include <fcntl.h>
 # include <limits.h>
-# include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
@@ -19,11 +28,10 @@
 # endif
 
 char	*get_next_line(int fd);
+void	*ft_dealloc(char **ptr);
 size_t	ft_strlen(const char *s);
-char	*ft_strjoin_l(char const *s1, char const *s2);
-char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr_l(const char *s, int c);
 char	*ft_strdup(const char *s);
-void	ft_deallocate(void **ptr);
+char	*ft_strjoin_l(char const *s1, char const *s2);
 
 #endif

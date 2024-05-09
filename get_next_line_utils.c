@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/09 19:39:10 by thopgood          #+#    #+#             */
+/*   Updated: 2024/05/09 19:47:53 by thopgood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-void	ft_deallocate(void **ptr)
+void	*ft_dealloc(char **ptr)
 {
 	if (ptr == NULL || *ptr == NULL)
-		return ;
+		return (NULL);
 	free(*ptr);
 	*ptr = NULL;
+	return (NULL);
 }
 
 size_t	ft_strlen(const char *s)
@@ -59,35 +72,6 @@ char	*ft_strdup(const char *s)
 	return (dup_s);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	i = 0;
-	j = 0;
-	if (!s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
-	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!str)
-	{
-		// ft_deallocate((void *)&s1);
-		return (NULL);
-	}
-	while (s1[i])
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-		str[i++] = s2[j++];
-	str[i] = '\0';
-	return (str);
-}
-
 /*
  * Allocates with malloc and returns new string, s1 + s2.
  * Returns ptr to new string or NULL if fails.
@@ -103,10 +87,7 @@ char	*ft_strjoin_l(char const *s1, char const *s2)
 	if (s2 == NULL)
 		return (NULL);
 	if (s1 == NULL)
-	{
-		// ft_deallocate((void *)&s1);
 		return (ft_strdup(s2));
-	}
 	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (res == NULL)
 		return (NULL);
@@ -117,6 +98,6 @@ char	*ft_strjoin_l(char const *s1, char const *s2)
 	while (s2[j])
 		res[i++] = s2[j++];
 	res[i] = '\0';
-	ft_deallocate((void *)&s1);
+	ft_dealloc((char **)&s1);
 	return (res);
 }
