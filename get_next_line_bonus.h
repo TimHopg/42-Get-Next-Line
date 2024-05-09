@@ -6,30 +6,32 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:10 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 19:40:11 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:08:46 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
+# include <fcntl.h>
+# include <limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
 # endif
 
-# include <ctype.h>
-# include <fcntl.h>
-# include <stddef.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include <limits.h>
+# ifndef MAX_FD
+#  define MAX_FD 1024
+# endif
 
-size_t	ft_strlen(char *str);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strchr(char *s, int c);
 char	*get_next_line(int fd);
-char	*ft_strdup(char *src);
+void	*ft_dealloc(char **ptr);
+size_t	ft_strlen(const char *s);
+char	*ft_strchr_l(const char *s, int c);
+char	*ft_strdup(const char *s);
+char	*ft_strjoin_l(char const *s1, char const *s2);
 
 #endif

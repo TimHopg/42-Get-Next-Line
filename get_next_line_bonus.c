@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 21:31:30 by thopgood         ###   ########.fr       */
+/*   Created: 2024/05/09 19:40:07 by thopgood          #+#    #+#             */
+/*   Updated: 2024/05/09 21:32:51 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 /*
 * temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
@@ -126,35 +126,3 @@ char	*get_next_line(int fd)
 		return (ft_dealloc(&line));
 	return (line);
 }
-
-// #include <fcntl.h> // open/write
-// # include <sys/stat.h> // USR permissions
-// #include <stdio.h> // printf
-
-// int	main(void)
-// {
-// 	int fd;
-// 	char *line;
-
-// 	fd = open("standard_test.txt", O_RDONLY);
-
-// 	line = get_next_line(fd);
-// 	printf("NEXT LINE:%s\n", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("NEXT LINE:%s\n", line);
-// 	free(line);
-
-// 	line = get_next_line(fd);
-// 	printf("NEXT LINE:%s\n", line);
-// 	free(line);
-
-// 	line = get_next_line(fd);
-// 	printf("NEXT LINE:%s\n", line);
-// 	free(line);
-
-// 	line = get_next_line(fd);
-// 	printf("NEXT LINE:%s\n", line);
-// 	free(line);
-
-// 	close(fd);}
