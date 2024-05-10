@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 16:44:23 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:57:22 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
  * Repeats until '\n' is encountered or EOF. Buffer is returned.
  */
 
-char	*ft_read_line(int fd, char *buffer)
+int ft_read_line(int fd, char **buffer)
 {
 	char	*temp_buf;
 	char	*temp_ptr;
@@ -66,19 +66,19 @@ char	*ft_read_line(int fd, char *buffer)
 	bytes_read = 1;
 	temp_buf = malloc(BUFFER_SIZE + 1);
 	if (temp_buf == NULL)
-		return (ft_dealloc(&buffer));
-	while (bytes_read && !ft_strchr_l(buffer, '\n'))
+		return (ft_dealloc(buffer), -1);
+	while (bytes_read && !ft_strchr_l(*buffer, '\n'))
 	{
 		bytes_read = read(fd, temp_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-			return (ft_dealloc(&buffer), ft_dealloc(&temp_buf));
+			return (ft_dealloc(buffer), ft_dealloc(&temp_buf), -1);
 		temp_buf[bytes_read] = '\0';
-		temp_ptr = buffer;
-		buffer = ft_strjoin_l(buffer, temp_buf);
-		if (buffer == NULL)
-			return (ft_dealloc(&temp_buf), ft_dealloc(&temp_ptr));
+		temp_ptr = *buffer;
+		*buffer = ft_strjoin_l(*buffer, temp_buf);
+		if (*buffer == NULL)
+			return (ft_dealloc(&temp_buf), ft_dealloc(&temp_ptr), -1);
 	}
-	return (ft_dealloc(&temp_buf), buffer);
+	return (ft_dealloc(&temp_buf), 0);
 }
 
 /*
@@ -153,8 +153,7 @@ char	*get_next_line(int fd)
 	buffer = ft_strdup(remainder[fd]);
 		if (buffer == NULL)
 			return (NULL);
-	buffer = ft_read_line(fd, buffer);
-	if (buffer == NULL)
+	if (ft_read_line(fd, &buffer) == -1)
 	{
 		// maybe we can clear remainder [fd] in ft_read_line
 		remainder[fd][0] = '\0';
