@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:07 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 18:08:33 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 23:20:18 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 /*
  * Copies at most dstsize - 1 bytes from src to dest truncating src
-	if necessary.
+ *		if necessary.
  * The destination string is always null terminated.
  * Returns total length of string that was attempted to create (len of src).
  * Check for buffer overflow as follows:
-	if (strlcpy(dst, src, dstsize) >= dstsize)
-		return (−1);
+ *	if (strlcpy(dst, src, dstsize) >= dstsize)
+ *		return (−1);
 */
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
@@ -37,10 +37,11 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
 }
 
 /*
- * temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
- * to it.
+ * Copies contents of rem to buffer.
+ * temp_buf of BUFFER_SIZE + 1 reads that many bytes from file
  * temp_buf is then copied to buffer.
- * Repeats until '\n' is encountered or EOF. Buffer is returned.
+ * Repeats until '\n' is encountered or EOF.
+ * Returns -1 if error encountered.
  */
 
 int	ft_read_line(int fd, char **buffer, char *rem)
@@ -51,7 +52,7 @@ int	ft_read_line(int fd, char **buffer, char *rem)
 
 	bytes_read = 1;
 	*buffer = ft_strdup(rem);
-	if (buffer == NULL)
+	if (*buffer == NULL)
 		return (-1);
 	temp_buf = malloc(BUFFER_SIZE + 1);
 	if (temp_buf == NULL)
@@ -99,7 +100,7 @@ char	*ft_build_line(char *buffer)
 
 /*
  * Locates '\n' if it exists and copies following chars to remainder,
- * which is returned. Else returns NULL.
+ * Returns -1 if error encountered.
  */
 
 int	ft_split_remainder(char **buffer)
@@ -126,6 +127,7 @@ int	ft_split_remainder(char **buffer)
  * Reads from buffer
  * Builds line for return
  * Splits remaining string if necessary
+ * Copies to static remainder or sets rem to 0
  */
 
 char	*get_next_line(int fd)
