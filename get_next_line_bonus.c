@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:07 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 23:20:18 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 23:56:02 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,19 +197,19 @@ char	*get_next_line(int fd)
 // 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
 // 	free(line);
 
-// 	line = get_next_line(fd2);
-// 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
-// 	free(line);
+// line = get_next_line(fd2);
+// printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
+// free(line);
 
-// 	line = get_next_line(fd3);
-// 	printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
-// 	free(line);
+// line = get_next_line(fd3);
+// printf("[Line %d][File 3] %s⤶", fd3_lines++, line);
+// free(line);
 
-// 	line = get_next_line(fd1);
-// 	printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
-// 	free(line);
+// line = get_next_line(fd1);
+// printf("[Line %d][File 1] %s⤶", fd1_lines++, line);
+// free(line);
 
-// 	line = get_next_line(fd2);
+// line = get_next_line(fd2);
 // 	printf("[Line %d][File 2] %s⤶", fd2_lines++, line);
 // 	free(line);
 

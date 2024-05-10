@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 23:19:11 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/11 00:00:23 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,15 +132,15 @@ int	ft_split_remainder(char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	remainder[MAX_FD][BUFFER_SIZE + 1];
+	static char	remainder[BUFFER_SIZE + 1];
 	char		*buffer;
 	char		*line;
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	if (ft_read_line(fd, &buffer, remainder[fd]) == -1)
+	if (ft_read_line(fd, &buffer, remainder) == -1)
 	{
-		remainder[fd][0] = '\0';
+		remainder[0] = '\0';
 		return (NULL);
 	}
 	line = ft_build_line(buffer);
@@ -149,9 +149,9 @@ char	*get_next_line(int fd)
 	if (ft_split_remainder(&buffer) == -1)
 		return (ft_dealloc(&line));
 	if (buffer)
-		ft_strlcpy(remainder[fd], buffer, ft_strlen(buffer) + 1);
+		ft_strlcpy(remainder, buffer, ft_strlen(buffer) + 1);
 	else
-		remainder[fd][0] = '\0';
+		remainder[0] = '\0';
 	return (ft_dealloc(&buffer), line);
 }
 
@@ -167,8 +167,8 @@ char	*get_next_line(int fd)
 //     /* Read lines until EOF (ctrl+d is pressed) */
 //     while ((line = get_next_line(fd)))
 //     {
-//         printf("Next line: %s", line);
-//         free(line);
+// 			printf("Next line: %s", line);
+//			free(line);
 //     }
 
 //     printf("End of input reached. Exiting...\n");
