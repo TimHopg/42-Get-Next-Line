@@ -6,25 +6,11 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 17:05:39 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:26:30 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (*src)
-	{
-		dest[i] = *src++;
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
 
 /*
  * Copies at most dstsize - 1 bytes from src to dest truncating src
@@ -64,6 +50,8 @@ int ft_read_line(int fd, char **buffer, char *rem)
 	int		bytes_read;
 
 	bytes_read = 1;
+	// if invalid fd, this will access memory it's not supposed to
+	// could use error code 
 	*buffer = ft_strdup(rem);
 	if (buffer == NULL)
 		return (-1);
@@ -144,21 +132,14 @@ int ft_split_remainder(char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	remainder[MAX_FD][BUFFER_SIZE + 1] = {0};
+	static char	remainder[MAX_FD][BUFFER_SIZE + 1];
 	char		*buffer;
 	char		*line;
 
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	// if invalid fd, this will access memory it's not supposed to
-	// could use error code 
-	// buffer = NULL;
-	// buffer = ft_strdup(remainder[fd]);
-	// if (buffer == NULL)
-	// 	return (NULL);
 	if (ft_read_line(fd, &buffer, remainder[fd]) == -1)
 	{
-		// maybe we can clear remainder [fd] in ft_read_line
 		remainder[fd][0] = '\0';
 		return (NULL);
 	}
