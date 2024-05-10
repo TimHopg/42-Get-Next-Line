@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 14:57:43 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:43:51 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,30 @@ char	*ft_strcpy(char *dest, char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+/*
+ * Copies at most dstsize - 1 bytes from src to dest truncating src
+ 	if necessary.
+ * The destination string is always null terminated.
+ * Returns total length of string that was attempted to create (len of src).
+ * Check for buffer overflow as follows:
+	if (strlcpy(dst, src, dstsize) >= dstsize)
+		return −1;		
+*/
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
+{
+	const char	*src_ptr;
+
+	src_ptr = src;
+	if (dstsize > 0)
+	{
+		while (*src_ptr && dstsize-- > 1)
+			*dest++ = *src_ptr++;
+		*dest = '\0';
+	}
+	return (ft_strlen(src));
 }
 
 /*
@@ -67,7 +91,7 @@ char	*ft_read_line(int fd, char *buffer)
 char	*ft_build_line(char *buffer)
 {
 	char	*line;
-	size_t	count;
+	// size_t	count;
 	size_t	split_index;
 	char	*nl_ptr;
 
@@ -81,10 +105,17 @@ char	*ft_build_line(char *buffer)
 	line = malloc(split_index + 1);
 	if (line == NULL)
 		return ((NULL));
-	count = -1;
-	while (++count < split_index)
-		line[count] = buffer[count];
-	line[count] = '\0';
+
+
+	ft_strlcpy(line, buffer, split_index + 1);
+
+
+	// count = -1;
+	// while (++count < split_index)
+	// 	line[count] = buffer[count];
+	// line[count] = '\0';
+
+
 	return (line);
 }
 
@@ -122,7 +153,7 @@ char	*ft_split_remainder(char *buffer, int *err_code)
 
 char	*get_next_line(int fd)
 {
-	static char	remainder[MAX_FD][BUFFER_SIZE + 1];
+	static char	remainder[MAX_FD][BUFFER_SIZE + 1] = {0};
 	char		*buffer;
 	char		*line;
 	int			err_code;
@@ -130,12 +161,24 @@ char	*get_next_line(int fd)
 	err_code = 0;
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	buffer = ft_strdup(remainder[fd]);
+	// if invalid fd, this will access memory it's not supposed to
+	// could use error code 
+	if (remainder[fd][0])
+	{
+		// printf("check");
+		buffer = ft_strdup(remainder[fd]);
 		if (buffer == NULL)
 			return (NULL);
+	}
+	else
+		buffer = NULL;
 	buffer = ft_read_line(fd, buffer);
 	if (buffer == NULL)
+	{
+		// maybe we can clear remainder [fd] in ft_read_line
+		remainder[fd][0] = '\0';
 		return (NULL);
+	}
 	line = ft_build_line(buffer);
 	if (line == NULL)
 		return (ft_dealloc(&buffer));
@@ -143,7 +186,7 @@ char	*get_next_line(int fd)
 	if (err_code == 1)
 		return (ft_dealloc(&line));
 	if (buffer)
-		ft_strcpy(remainder[fd], buffer);
+		ft_strlcpy(remainder[fd], buffer, ft_strlen(buffer) + 1);
 	else
 		remainder[fd][0] = '\0';
 	return (ft_dealloc(&buffer), line);
