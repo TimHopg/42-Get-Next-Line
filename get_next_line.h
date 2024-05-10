@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:18 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 14:57:47 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:35:06 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # endif
 
 # ifndef MAX_FD
-#  define MAX_FD 1024
+#  define MAX_FD 512
 # endif
 
 char	*get_next_line(int fd);
