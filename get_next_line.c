@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 16:09:36 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:44:23 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,25 +113,24 @@ char	*ft_build_line(char *buffer)
  * which is returned. Else returns NULL.
  */
 
-char	*ft_split_remainder(char *buffer, int *err_code)
+int ft_split_remainder(char **buffer)
 {
 	char	*remainder;
 	char	*nl_pos;
 	char	*temp_ptr;
 
-	if (buffer == NULL)
-		return (NULL);
-	nl_pos = ft_strchr_l(buffer, '\n');
+	if (*buffer == NULL)
+		return (0);
+	nl_pos = ft_strchr_l(*buffer, '\n');
 	if (!nl_pos)
-		return (ft_dealloc(&buffer));
-	temp_ptr = buffer;
+		return (ft_dealloc(buffer), 0);
+	temp_ptr = *buffer;
 	remainder = ft_strdup(nl_pos + 1);
 	if (remainder == NULL)
-	{
-		*err_code = 1;
-		return (ft_dealloc(&temp_ptr));
-	}
-	return (ft_dealloc(&buffer), remainder);
+		return (ft_dealloc(&temp_ptr), -1);
+	ft_dealloc(buffer);
+	*buffer = remainder;
+	return (0);
 }
 
 /*
@@ -145,9 +144,7 @@ char	*get_next_line(int fd)
 	static char	remainder[MAX_FD][BUFFER_SIZE + 1] = {0};
 	char		*buffer;
 	char		*line;
-	int			err_code;
 
-	err_code = 0;
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
 		return (NULL);
 	// if invalid fd, this will access memory it's not supposed to
@@ -166,8 +163,7 @@ char	*get_next_line(int fd)
 	line = ft_build_line(buffer);
 	if (line == NULL)
 		return (ft_dealloc(&buffer));
-	buffer = ft_split_remainder(buffer, &err_code);
-	if (err_code == 1)
+	if (ft_split_remainder(&buffer) == -1)
 		return (ft_dealloc(&line));
 	if (buffer)
 		ft_strlcpy(remainder[fd], buffer, ft_strlen(buffer) + 1);
