@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 15:43:51 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:09:36 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ char	*ft_read_line(int fd, char *buffer)
 char	*ft_build_line(char *buffer)
 {
 	char	*line;
-	// size_t	count;
 	size_t	split_index;
 	char	*nl_ptr;
 
@@ -105,17 +104,7 @@ char	*ft_build_line(char *buffer)
 	line = malloc(split_index + 1);
 	if (line == NULL)
 		return ((NULL));
-
-
 	ft_strlcpy(line, buffer, split_index + 1);
-
-
-	// count = -1;
-	// while (++count < split_index)
-	// 	line[count] = buffer[count];
-	// line[count] = '\0';
-
-
 	return (line);
 }
 
@@ -163,15 +152,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	// if invalid fd, this will access memory it's not supposed to
 	// could use error code 
-	if (remainder[fd][0])
-	{
-		// printf("check");
-		buffer = ft_strdup(remainder[fd]);
+	buffer = NULL;
+	buffer = ft_strdup(remainder[fd]);
 		if (buffer == NULL)
 			return (NULL);
-	}
-	else
-		buffer = NULL;
 	buffer = ft_read_line(fd, buffer);
 	if (buffer == NULL)
 	{
@@ -222,16 +206,16 @@ char	*get_next_line(int fd)
 // 	close(fd);
 // 	fd = open("empty.txt", O_RDONLY);
 	
-// 	line = get_next_line(fd);
-// 	printf("%s line", line);
+// 	line = get_next_line(1000);
+// 	printf("%s<line\n", line);
+// 	free(line);
+
+// 	line = get_next_line(-1);
+// 	printf("%s<line\n", line);
 // 	free(line);
 
 // 	line = get_next_line(fd);
-// 	printf("%s line", line);
-// 	free(line);
-
-// 	line = get_next_line(fd);
-// 	printf("%s line", line);
+// 	printf("%s<line\n", line);
 // 	free(line);
 
 // 	close(fd);
