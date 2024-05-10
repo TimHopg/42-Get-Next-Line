@@ -6,18 +6,32 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 21:48:46 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:57:43 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (*src)
+	{
+		dest[i] = *src++;
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 /*
-* temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
-* to it.
-* temp_buf is then copied to buffer.
-* Repeats until '\n' is encountered or EOF. Buffer is returned.
-*/
+ * temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
+ * to it.
+ * temp_buf is then copied to buffer.
+ * Repeats until '\n' is encountered or EOF. Buffer is returned.
+ */
 
 char	*ft_read_line(int fd, char *buffer)
 {
@@ -44,11 +58,11 @@ char	*ft_read_line(int fd, char *buffer)
 }
 
 /*
-* Receives buffer string which either contains '\n' or is EOF line
-* Locates '\n' if it exists and assigns its index to 'split_index'.
-* If no '\n' split_index is set to length of buffer.
-* Appropriate chars are then copied to line and returned.
-*/
+ * Receives buffer string which either contains '\n' or is EOF line
+ * Locates '\n' if it exists and assigns its index to 'split_index'.
+ * If no '\n' split_index is set to length of buffer.
+ * Appropriate chars are then copied to line and returned.
+ */
 
 char	*ft_build_line(char *buffer)
 {
@@ -75,9 +89,9 @@ char	*ft_build_line(char *buffer)
 }
 
 /*
-* Locates '\n' if it exists and copies following chars to remainder,
-* which is returned. Else returns NULL.
-*/
+ * Locates '\n' if it exists and copies following chars to remainder,
+ * which is returned. Else returns NULL.
+ */
 
 char	*ft_split_remainder(char *buffer, int *err_code)
 {
@@ -101,30 +115,38 @@ char	*ft_split_remainder(char *buffer, int *err_code)
 }
 
 /*
-* Reads from buffer
-* Builds line for return
-* Splits remaining string if necessary
-*/
+ * Reads from buffer
+ * Builds line for return
+ * Splits remaining string if necessary
+ */
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer[MAX_FD];
+	static char	remainder[MAX_FD][BUFFER_SIZE + 1];
+	char		*buffer;
 	char		*line;
 	int			err_code;
 
 	err_code = 0;
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	buffer[fd] = ft_read_line(fd, buffer[fd]);
-	if (buffer[fd] == NULL)
+	buffer = ft_strdup(remainder[fd]);
+		if (buffer == NULL)
+			return (NULL);
+	buffer = ft_read_line(fd, buffer);
+	if (buffer == NULL)
 		return (NULL);
-	line = ft_build_line(buffer[fd]);
+	line = ft_build_line(buffer);
 	if (line == NULL)
-		return (ft_dealloc(&buffer[fd]));
-	buffer[fd] = ft_split_remainder(buffer[fd], &err_code);
+		return (ft_dealloc(&buffer));
+	buffer = ft_split_remainder(buffer, &err_code);
 	if (err_code == 1)
 		return (ft_dealloc(&line));
-	return (line);
+	if (buffer)
+		ft_strcpy(remainder[fd], buffer);
+	else
+		remainder[fd][0] = '\0';
+	return (ft_dealloc(&buffer), line);
 }
 
 // /************* STANDARD INPUT ***************/
@@ -134,7 +156,7 @@ char	*get_next_line(int fd)
 //     int fd = 0; // std input
 
 // 	//ctrl+d == end of file
-//     printf("Enter text (press Ctrl+D to exit):\n"); 
+//     printf("Enter text (press Ctrl+D to exit):\n");
 
 //     /* Read lines until EOF (ctrl+d is pressed) */
 //     while ((line = get_next_line(fd)))
@@ -144,28 +166,33 @@ char	*get_next_line(int fd)
 //     }
 
 //     printf("End of input reached. Exiting...\n");
-//     return 0;
+//     return (0);
 // }
 
 // /************ EVALUATOR'S INPUT ************/
-// int main(void)
+// int	main(void)
 // {
-//     char *line;
-// 	int fd;
-// 	int lines_read = 1;
+// 	char	*line;
+// 	int		fd;
 
 // 	fd = open("empty.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
 // 	close(fd);
-
 // 	fd = open("empty.txt", O_RDONLY);
-// 	while ((line = get_next_line(fd)))
-// 	{
-// 		printf("[Line %d]%s⤶", lines_read++, line);
-// 		free(line);
-// 	}
-//     close(fd);
-// 	printf("\n\n");
-//     return 0;
+	
+// 	line = get_next_line(fd);
+// 	printf("%s line", line);
+// 	free(line);
+
+// 	line = get_next_line(fd);
+// 	printf("%s line", line);
+// 	free(line);
+
+// 	line = get_next_line(fd);
+// 	printf("%s line", line);
+// 	free(line);
+
+// 	close(fd);
+// 	return (0);
 // }
 
 // /************* MAIN TESTS ***************/
