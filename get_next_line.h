@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:18 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 17:35:06 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:07:37 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
 # include <unistd.h>
-#include <sys/stat.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42

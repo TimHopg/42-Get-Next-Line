@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 17:40:21 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:07:04 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 /*
  * Copies at most dstsize - 1 bytes from src to dest truncating src
- 	if necessary.
+	if necessary.
  * The destination string is always null terminated.
  * Returns total length of string that was attempted to create (len of src).
  * Check for buffer overflow as follows:
 	if (strlcpy(dst, src, dstsize) >= dstsize)
-		return −1;		
+		return (−1);
 */
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
@@ -43,7 +43,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
  * Repeats until '\n' is encountered or EOF. Buffer is returned.
  */
 
-int ft_read_line(int fd, char **buffer, char *rem)
+int	ft_read_line(int fd, char **buffer, char *rem)
 {
 	char	*temp_buf;
 	char	*temp_ptr;
@@ -102,7 +102,7 @@ char	*ft_build_line(char *buffer)
  * which is returned. Else returns NULL.
  */
 
-int ft_split_remainder(char **buffer)
+int	ft_split_remainder(char **buffer)
 {
 	char	*remainder;
 	char	*nl_pos;
@@ -182,7 +182,7 @@ char	*get_next_line(int fd)
 // 	fd = open("empty.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
 // 	close(fd);
 // 	fd = open("empty.txt", O_RDONLY);
-	
+
 // 	line = get_next_line(1000);
 // 	printf("%s<line\n", line);
 // 	free(line);

@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:10 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 21:08:46 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:12:01 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
 # endif
 
 # ifndef MAX_FD
-#  define MAX_FD 1024
+#  define MAX_FD 512
 # endif
 
 char	*get_next_line(int fd);

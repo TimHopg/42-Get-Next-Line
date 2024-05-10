@@ -6,54 +6,80 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:40:07 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/09 21:55:43 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:08:33 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
 /*
-* temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
-* to it.
-* temp_buf is then copied to buffer.
-* Repeats until '\n' is encountered or EOF. Buffer is returned.
+ * Copies at most dstsize - 1 bytes from src to dest truncating src
+	if necessary.
+ * The destination string is always null terminated.
+ * Returns total length of string that was attempted to create (len of src).
+ * Check for buffer overflow as follows:
+	if (strlcpy(dst, src, dstsize) >= dstsize)
+		return (−1);
 */
 
-char	*ft_read_line(int fd, char *buffer)
+size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
+{
+	const char	*src_ptr;
+
+	src_ptr = src;
+	if (dstsize > 0)
+	{
+		while (*src_ptr && dstsize-- > 1)
+			*dest++ = *src_ptr++;
+		*dest = '\0';
+	}
+	return (ft_strlen(src));
+}
+
+/*
+ * temp_buf of BUFFER_SIZE + 1 is created and that number of chars are written
+ * to it.
+ * temp_buf is then copied to buffer.
+ * Repeats until '\n' is encountered or EOF. Buffer is returned.
+ */
+
+int	ft_read_line(int fd, char **buffer, char *rem)
 {
 	char	*temp_buf;
 	char	*temp_ptr;
 	int		bytes_read;
 
 	bytes_read = 1;
+	*buffer = ft_strdup(rem);
+	if (buffer == NULL)
+		return (-1);
 	temp_buf = malloc(BUFFER_SIZE + 1);
 	if (temp_buf == NULL)
-		return (ft_dealloc(&buffer));
-	while (bytes_read && !ft_strchr_l(buffer, '\n'))
+		return (ft_dealloc(buffer), -1);
+	while (bytes_read && !ft_strchr_l(*buffer, '\n'))
 	{
 		bytes_read = read(fd, temp_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-			return (ft_dealloc(&buffer), ft_dealloc(&temp_buf));
+			return (ft_dealloc(buffer), ft_dealloc(&temp_buf), -1);
 		temp_buf[bytes_read] = '\0';
-		temp_ptr = buffer;
-		buffer = ft_strjoin_l(buffer, temp_buf);
-		if (buffer == NULL)
-			return (ft_dealloc(&temp_buf), ft_dealloc(&temp_ptr));
+		temp_ptr = *buffer;
+		*buffer = ft_strjoin_l(*buffer, temp_buf);
+		if (*buffer == NULL)
+			return (ft_dealloc(&temp_buf), ft_dealloc(&temp_ptr), -1);
 	}
-	return (ft_dealloc(&temp_buf), buffer);
+	return (ft_dealloc(&temp_buf), 0);
 }
 
 /*
-* Receives buffer string which either contains '\n' or is EOF line
-* Locates '\n' if it exists and assigns its index to 'split_index'.
-* If no '\n' split_index is set to length of buffer.
-* Appropriate chars are then copied to line and returned.
-*/
+ * Receives buffer string which either contains '\n' or is EOF line
+ * Locates '\n' if it exists and assigns its index to 'split_index'.
+ * If no '\n' split_index is set to length of buffer.
+ * Appropriate chars are then copied to line and returned.
+ */
 
 char	*ft_build_line(char *buffer)
 {
 	char	*line;
-	size_t	count;
 	size_t	split_index;
 	char	*nl_ptr;
 
@@ -67,64 +93,64 @@ char	*ft_build_line(char *buffer)
 	line = malloc(split_index + 1);
 	if (line == NULL)
 		return ((NULL));
-	count = -1;
-	while (++count < split_index)
-		line[count] = buffer[count];
-	line[count] = '\0';
+	ft_strlcpy(line, buffer, split_index + 1);
 	return (line);
 }
 
 /*
-* Locates '\n' if it exists and copies following chars to remainder,
-* which is returned. Else returns NULL.
-*/
+ * Locates '\n' if it exists and copies following chars to remainder,
+ * which is returned. Else returns NULL.
+ */
 
-char	*ft_split_remainder(char *buffer, int *err_code)
+int	ft_split_remainder(char **buffer)
 {
 	char	*remainder;
 	char	*nl_pos;
 	char	*temp_ptr;
 
-	if (buffer == NULL)
-		return (NULL);
-	nl_pos = ft_strchr_l(buffer, '\n');
+	if (*buffer == NULL)
+		return (0);
+	nl_pos = ft_strchr_l(*buffer, '\n');
 	if (!nl_pos)
-		return (ft_dealloc(&buffer));
-	temp_ptr = buffer;
+		return (ft_dealloc(buffer), 0);
+	temp_ptr = *buffer;
 	remainder = ft_strdup(nl_pos + 1);
 	if (remainder == NULL)
-	{
-		*err_code = 1;
-		return (ft_dealloc(&temp_ptr));
-	}
-	return (ft_dealloc(&buffer), remainder);
+		return (ft_dealloc(&temp_ptr), -1);
+	ft_dealloc(buffer);
+	*buffer = remainder;
+	return (0);
 }
 
 /*
-* Reads from buffer
-* Builds line for return
-* Splits remaining string if necessary
-*/
+ * Reads from buffer
+ * Builds line for return
+ * Splits remaining string if necessary
+ */
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer[MAX_FD];
+	static char	remainder[MAX_FD][BUFFER_SIZE + 1];
+	char		*buffer;
 	char		*line;
-	int			err_code;
 
-	err_code = 0;
-	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= INT_MAX || fd < 0 || fd >= MAX_FD)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd >= MAX_FD)
 		return (NULL);
-	buffer[fd] = ft_read_line(fd, buffer[fd]);
-	if (buffer[fd] == NULL)
+	if (ft_read_line(fd, &buffer, remainder[fd]) == -1)
+	{
+		remainder[fd][0] = '\0';
 		return (NULL);
-	line = ft_build_line(buffer[fd]);
+	}
+	line = ft_build_line(buffer);
 	if (line == NULL)
-		return (ft_dealloc(&buffer[fd]));
-	buffer[fd] = ft_split_remainder(buffer[fd], &err_code);
-	if (err_code == 1)
+		return (ft_dealloc(&buffer));
+	if (ft_split_remainder(&buffer) == -1)
 		return (ft_dealloc(&line));
-	return (line);
+	if (buffer)
+		ft_strlcpy(remainder[fd], buffer, ft_strlen(buffer) + 1);
+	else
+		remainder[fd][0] = '\0';
+	return (ft_dealloc(&buffer), line);
 }
 
 // int	main(void)
