@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/10 16:57:22 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:05:39 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,16 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
  * Repeats until '\n' is encountered or EOF. Buffer is returned.
  */
 
-int ft_read_line(int fd, char **buffer)
+int ft_read_line(int fd, char **buffer, char *rem)
 {
 	char	*temp_buf;
 	char	*temp_ptr;
 	int		bytes_read;
 
 	bytes_read = 1;
+	*buffer = ft_strdup(rem);
+	if (buffer == NULL)
+		return (-1);
 	temp_buf = malloc(BUFFER_SIZE + 1);
 	if (temp_buf == NULL)
 		return (ft_dealloc(buffer), -1);
@@ -149,11 +152,11 @@ char	*get_next_line(int fd)
 		return (NULL);
 	// if invalid fd, this will access memory it's not supposed to
 	// could use error code 
-	buffer = NULL;
-	buffer = ft_strdup(remainder[fd]);
-		if (buffer == NULL)
-			return (NULL);
-	if (ft_read_line(fd, &buffer) == -1)
+	// buffer = NULL;
+	// buffer = ft_strdup(remainder[fd]);
+	// if (buffer == NULL)
+	// 	return (NULL);
+	if (ft_read_line(fd, &buffer, remainder[fd]) == -1)
 	{
 		// maybe we can clear remainder [fd] in ft_read_line
 		remainder[fd][0] = '\0';
