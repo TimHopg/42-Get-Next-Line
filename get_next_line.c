@@ -6,7 +6,7 @@
 /*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:39:06 by thopgood          #+#    #+#             */
-/*   Updated: 2024/05/11 00:00:23 by thopgood         ###   ########.fr       */
+/*   Updated: 2024/05/11 11:04:52 by thopgood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ char	*get_next_line(int fd)
 //     while ((line = get_next_line(fd)))
 //     {
 // 			printf("Next line: %s", line);
-//			free(line);
+// 			free(line);
 //     }
 
 //     printf("End of input reached. Exiting...\n");
