@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/17 12:16:53 by thopgood          #+#    #+#             */
+/*   Updated: 2024/09/17 12:16:59 by thopgood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-int main(void)
+int	main(void)
 {
-	char *line;
+	char	*line;
 
 	line = get_next_line(0);
-	while(line)
+	while (line)
 	{
 		printf("%s\n", line);
 		free(line);
@@ -41,7 +53,7 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("READ FAIL 1ST ITERATION\n");
@@ -81,7 +93,7 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("MULTIPLE LONG LINE\n");
@@ -106,11 +118,12 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("SINGLE SHORT LINE\n");
-	fd = open("txt/single_shortline.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+	fd = open("txt/single_shortline.txt", O_WRONLY | O_CREAT,
+			S_IRUSR | S_IWUSR);
 	write(fd, "Z", 1);
 	close(fd);
 
@@ -121,7 +134,7 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("MULTI SHORT LINE\n");
@@ -139,12 +152,13 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("SINGLE EMTPY LINE\n");
 	printf("Should return (null)\n");
-	fd = open("txt/single_emptyline.txt", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+	fd = open("txt/single_emptyline.txt", O_WRONLY | O_CREAT,
+			S_IRUSR | S_IWUSR);
 	write(fd, "", 0);
 	close(fd);
 
@@ -153,7 +167,7 @@ int main(void)
 	line = get_next_line(fd);
 	printf("[Line %d]%s⤶", lines_read++, line);
 	free(line);
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	printf("MULTI EMPTY LINE\n");
@@ -171,7 +185,7 @@ int main(void)
 		printf("[Line %d]%s⤶", lines_read++, line);
 		free(line);
 	}
-    close(fd);
+	close(fd);
 	printf("\n\n");
 
 	return (0);

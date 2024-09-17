@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thopgood <thopgood@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/17 12:17:27 by thopgood          #+#    #+#             */
+/*   Updated: 2024/09/17 12:18:55 by thopgood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 /*
@@ -27,7 +39,7 @@ int	ft_clean_buffer(char *buffer)
 }
 /*
  * ft_strlen_gnl edited to return length of string to either '\n' incl or '\0'.
-* Returns 0 if str doesn't exist.
+ * Returns 0 if str doesn't exist.
  */
 
 size_t	ft_strlen_gnl(char *str)
@@ -50,7 +62,8 @@ size_t	ft_strlen_gnl(char *str)
  * While s1 exists & s1[0] has data, string is copied to res. Then s1 is freed.
  * If s1 (line) doesn't exist (is NULL) i.e. on first pass, i is reset to 0.
  * While chars exist on s2, they are copied to res, from res[0] if !s1 and from
- * the end of 
+ * the end of the buffer.
+ * // C Standard explicitly allows calling free on NULL ptr
  */
 
 char	*ft_strjoin_gnl(char *s1, char *s2)
@@ -67,7 +80,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 		res[i] = s1[i];
 		i++;
 	}
-	free(s1); // C Standard explicitly allows calling free on NULL ptr
+	free(s1);
 	while (*s2)
 	{
 		res[i++] = *s2;
