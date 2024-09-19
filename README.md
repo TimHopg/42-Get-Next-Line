@@ -1,4 +1,6 @@
-# 42-Get-Next-Line
+# 42-get_next_line
+
+![get_next_line grade](./get_next_line_grade.png)
 
 ## Table of Contents
 
